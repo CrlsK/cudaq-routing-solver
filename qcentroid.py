@@ -6,7 +6,28 @@ Algorithm: QAOA for QUBO-VRP | Hardware: NVIDIA GPU via CUDA-Q
 import logging, time, math
 from typing import List, Tuple, Dict, Any
 import numpy as np
-from scipy.optimize import minimize
+try:
+    from scipy.optimize import minimize as _scipy_minimize
+    def minimize(fn, x0, method=None, options=None, **kw):
+        return _scipy_minimize(fn, x0, method=method, options=options, **kw)
+except ImportError:
+    def minimize(fn, x0, method=None, options=None, **kw):
+        """Simple coordinate-descent fallback when scipy unavailable."""
+        x = np.array(x0, dtype=float)
+        best = fn(x); maxiter = (options or {}).get('maxiter', 100)
+        step, nfev = 0.3, 1
+        for _ in range(maxiter):
+            improved = False
+            for i in range(len(x)):
+                for d in [step, -step]:
+                    xn = x.copy(); xn[i] += d; v = fn(xn); nfev += 1
+                    if v < best:
+                        best, x, improved = v, xn, True; break
+                if improved: break
+            if not improved: step *= 0.5
+            if step < 1e-6: break
+        class _R: pass
+        r = _R(); r.x = x; r.fun = best; r.nfev = nfev; return r
 
 logger = logging.getLogger("qcentroid-user-log")
 
