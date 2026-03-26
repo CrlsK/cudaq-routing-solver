@@ -1,0 +1,6 @@
+# CUDA-Q QAOA routing solver - Python dependencies
+# Platform: QCentroid GPU-enabled ECS task (NVIDIA A100 / V100)
+
+numpy>=1.24.0
+scipy>=1.10.0
+cudaq>=0.9.0
