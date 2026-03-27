@@ -40,7 +40,7 @@ try:
         cudaq.set_target("qpp-cpu")
         _CUDAQ_TARGET = "qpp-cpu (CPU fallback)"
     _CUDAQ_AVAILABLE = True
-except ImportError:
+except Exception:
     _CUDAQ_AVAILABLE = False
     _CUDAQ_TARGET = "unavailable"
 
