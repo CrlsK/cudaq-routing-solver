@@ -13,8 +13,6 @@ Algorithm:
   6. Generate additional_output/ HTML visualizations
   7. Return routes, objective, benchmark, and quantum metrics
 """
-from __future__ import annotations
-
 import math, time, logging, os, json
 import numpy as np
 
